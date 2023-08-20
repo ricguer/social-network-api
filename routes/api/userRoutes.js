@@ -12,11 +12,8 @@ const {
 
                                                                 /* ===================== ROUTES ======================= */
 router.route("/").get(getAllUsers).post(createUser);            /* /api/users                                           */
-
 router.route("/:userId").get(getUserById);                      /* /api/users/:userId                                   */
-
 router.route("/:userId").put(updateUser);                       /* /api/users/:userId/friends/:friendId                 */
-
 router.route("/:userId").delete(deleteUser);                    /* /api/users/:userId/friends/:friendId                 */
 
                                                                 /* /api/users/:userId/friends/:friendId                 */
