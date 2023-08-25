@@ -1,9 +1,10 @@
                                                                 /* ===================== IMPORTS ====================== */
-const mongoose = require("mongoose");
+const {Schema, model} = require("mongoose");
+const Reaction = require("./Reaction");
 
 
                                                                 /* ==================== SCHEMA ======================= */
-const thoughtSchema = new mongoose.Schema({
+const thoughtSchema = new Schema({
     thoughtText: {
         type: String,
         required: true,
@@ -14,21 +15,12 @@ const thoughtSchema = new mongoose.Schema({
     createdAt: {
         type: Date,
         default: Date.now,
-        // Use a getter method to format the timestamp on query
-        get: (createdAtVal) => dateFormat(createdAtVal),
     },
     username: {
         type: String,
         required: true,
     },
-    // reactions (These are like replies)
-    reactions: [
-        {
-            // Array of nested documents created with the `reactionSchema`
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "Reaction",
-        },
-    ],
+    reactions: [ Reaction ],
 });
 
 
@@ -37,7 +29,7 @@ thoughtSchema.virtual("reactionCount").get(function () {
     return this.reactions.length;
 });
 
-const Thought = mongoose.model("Thought", thoughtSchema);
+const Thought = model("Thought", thoughtSchema);
 
 
                                                                 /* ==================== EXPORT ======================= */

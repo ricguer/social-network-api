@@ -1,5 +1,6 @@
                                                                 /* ===================== IMPORTS ====================== */
 const Thought = require("../models/Thought");
+const User = require("../models/User");
 
 
                                                                 /* ===================== EXPORTS ====================== */
@@ -27,6 +28,13 @@ module.exports = {
     async createThought(req, res) {
         try {
             const thought = await Thought.create(req.body);
+
+            const user = await User.findOneAndUpdate(
+                { _id: req.body.userId },
+                { $push: { thoughts: thought._id } },
+                { runValidators: true, new: true }
+            );
+
             res.json(thought);
         } 
         catch (err) {
@@ -69,6 +77,8 @@ module.exports = {
         }
     },
     async addReaction(req, res) {
+        console.log(req.body);
+        console.log(req.params.thoughtId);
         try {
             const thought = await Thought.findOneAndUpdate(
                 { _id: req.params.thoughtId },
@@ -84,10 +94,10 @@ module.exports = {
         }
         catch (err) {
             console.log(err);
-            res.status(400).json(err);
+            res.status(500).json(err);
         }
     },
-    async deleteReaction(req, res) {
+    async removeReaction(req, res) {
         try {
             const thought = await Thought.findOneAndUpdate(
                 { _id: req.params.thoughtId },
@@ -103,7 +113,7 @@ module.exports = {
         }
         catch (err) {
             console.log(err);
-            res.status(400).json(err);
+            res.status(500).json(err);
         }
     }
 };

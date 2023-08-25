@@ -1,5 +1,6 @@
                                                                 /* ===================== IMPORTS ====================== */
 const User = require("../models/User");
+const Thought = require("../models/Thought");
 
 
                                                                 /* ===================== EXPORTS ====================== */
@@ -41,6 +42,8 @@ module.exports = {
                 { $set: req.body },
                 { runValidators: true, new: true }
             );
+
+            res.json(user);
         } 
         catch (err) {
             console.log(err);
@@ -54,7 +57,7 @@ module.exports = {
             if (!user) {
                 return res.status(404).json({ message: "No user found with this id!" });
             }
-            
+
             await Thought.deleteMany({ username: user.username });
 
             res.json({ message: "User deleted!" });
